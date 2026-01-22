@@ -5,7 +5,7 @@ from helpers import *
 from conftest import create_user
 
 class TestUserAuthorization:
-    @allure.step('Вход под существующим пользователем POST запрос /api/auth/login')
+    @allure.title('Вход под существующим пользователем POST запрос /api/auth/login')
     def test_user_authorization(self, create_user):
         login_pass = create_user
         response = requests.post(EndpointAndUrl.LOGIN_USER, data={
@@ -15,7 +15,7 @@ class TestUserAuthorization:
         assert response.status_code == 200
         assert response.json()['success'] is True
 
-    @allure.step('Вход с неверным логином email POST запрос /api/auth/login')
+    @allure.title('Вход с неверным логином email POST запрос /api/auth/login')
     def test_user_authorization_with_wrong_email(self, create_user):
         login_pass = create_user
         response = requests.post(EndpointAndUrl.LOGIN_USER, data={
@@ -26,7 +26,7 @@ class TestUserAuthorization:
         assert response.json()['success'] is False
         assert response.json()['message'] == Message.INCORRECT_DATA
 
-    @allure.step('Вход с неверным паролем POST запрос /api/auth/login')
+    @allure.title('Вход с неверным паролем POST запрос /api/auth/login')
     def test_user_autorization_with_wrong_password(self, create_user):
         login_pass = create_user
         response = requests.post(EndpointAndUrl.LOGIN_USER, data={

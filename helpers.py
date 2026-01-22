@@ -1,6 +1,6 @@
 import allure
 import requests
-#import random
+
 from data import EndpointAndUrl
 from faker import Faker
 

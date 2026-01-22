@@ -8,7 +8,7 @@ from helpers import *
 
 class TestCreateUser:
 
-    @allure.step('Успешное создание уникального пользователя POST запрос /api/auth/register')
+    @allure.title('Успешное создание уникального пользователя POST запрос /api/auth/register')
     def test_create_user(self):
         email, password, name = generate_data()
         payload = {
@@ -20,7 +20,7 @@ class TestCreateUser:
         assert response.status_code == 200
         assert response.json()['success'] is True
 
-    @allure.step('Создание пользователя, который уже зарегистрирован POST запрос /api/auth/register')
+    @allure.title('Создание пользователя, который уже зарегистрирован POST запрос /api/auth/register')
     def test_create_two_identical_user(self):
         login_pass = register_new_user()
         response = requests.post(EndpointAndUrl.CREATE_USER, data = {
@@ -33,7 +33,7 @@ class TestCreateUser:
         assert response.json()['message'] == Message.USER_ALREADY_EXISTS
 
 
-    @allure.step('Cоздать пользователя и не заполнить одно из обязательных полей POST запрос /api/auth/register')
+    @allure.title('Cоздать пользователя и не заполнить одно из обязательных полей POST запрос /api/auth/register')
     @pytest.mark.parametrize('field', ['email', 'password'])
     def test_create_user_whithout_email_or_password(self, field):
         payload = generate_data_payload()
