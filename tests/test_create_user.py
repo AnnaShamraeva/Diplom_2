@@ -8,7 +8,7 @@ from helpers import *
 
 class TestCreateUser:
 
-    @allure.title('Успешное создание уникального пользователя POST запрос /api/auth/register')
+    @allure.title('Успешное создание уникального пользователя')
     def test_create_user(self):
         email, password, name = generate_data()
         payload = {
@@ -16,18 +16,20 @@ class TestCreateUser:
             'password': password,
             'name': name
         }
-        response = requests.post(EndpointAndUrl.CREATE_USER, data = payload)
+        with allure.step("Отправляем запрос на создание пользователя на POST /api/auth/register"):
+            response = requests.post(EndpointAndUrl.CREATE_USER, data = payload)
         assert response.status_code == 200
         assert response.json()['success'] is True
 
-    @allure.title('Создание пользователя, который уже зарегистрирован POST запрос /api/auth/register')
+    @allure.title('Создание пользователя, который уже зарегистрирован')
     def test_create_two_identical_user(self):
         login_pass = register_new_user()
-        response = requests.post(EndpointAndUrl.CREATE_USER, data = {
-            'email': login_pass[0],
-            'password': login_pass[1],
-            'name': login_pass[2]
-        })
+        with allure.step("Отправляем запрос на создание пользователя, который уже зарегистрирован, на POST /api/auth/register"):
+            response = requests.post(EndpointAndUrl.CREATE_USER, data = {
+                'email': login_pass[0],
+                'password': login_pass[1],
+                'name': login_pass[2]
+            })
         assert response.status_code == 403
         assert response.json()['success'] is False
         assert response.json()['message'] == Message.USER_ALREADY_EXISTS
@@ -38,7 +40,8 @@ class TestCreateUser:
     def test_create_user_whithout_email_or_password(self, field):
         payload = generate_data_payload()
         del payload[field]
-        response = requests.post(EndpointAndUrl.CREATE_USER, data = payload)
+        with allure.step(f"Отправляем запрос на создание пользователя без {field}"):
+            response = requests.post(EndpointAndUrl.CREATE_USER, data = payload)
         assert response.status_code == 403
         assert response.json()['success'] is False
         assert response.json()['message'] == Message.USER_WITHOUT_DATA
